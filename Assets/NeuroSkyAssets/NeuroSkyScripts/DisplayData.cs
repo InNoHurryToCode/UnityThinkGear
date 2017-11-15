@@ -33,6 +33,13 @@ public class DisplayData : MonoBehaviour {
     private float Algo_Beta = 0.0f;
     private float Algo_Gamma = 0.0f;
 
+#if UNITY_ANDROID
+    private string ConnectionState = "";
+#endif
+#if UNITY_IOS
+    private string DeviceInfo = "";
+#endif
+
 	// Use this for initialization
 	void Start () {
 		controller = GameObject.Find("ThinkGear").GetComponent<ThinkGearController>();
@@ -55,7 +62,14 @@ public class DisplayData : MonoBehaviour {
 
 		controller.UpdateBlinkEvent += OnUpdateBlink;
 
-		controller.UpdateDeviceInfoEvent += OnUpdateDeviceInfo;
+#if UNITY_ANDROID
+        controller.UpdateConnectStateEvent += OnUpdateConnectionState;
+#endif
+
+#if UNITY_IOS
+        controller.UpdateDeviceInfoEvent += OnUpdateDeviceInfo;
+#endif
+
         controller.Algo_UpdateAttentionEvent += OnAlgo_UpdateAttentionEvent;
         controller.Algo_UpdateMeditationEvent += OnAlgo_UpdateMeditationEvent;
         controller.Algo_UpdateDeltaEvent += OnAlgo_UpdateDeltaEvent;
@@ -149,12 +163,20 @@ public class DisplayData : MonoBehaviour {
 		Blink = value;
 	}
 
+#if UNITY_ANDROID
+    void OnUpdateConnectionState(string value)
+    {
+        ConnectionState = value;
+    }
+#endif
 
-	void OnUpdateDeviceInfo(string deviceInfo){
-		//deviceFound deviceInfo = NSF4F1BF;MindWave Mobile;BAFCEB11-2DB6-70B3-B038-B4AD2EFC6309
-		// FMGID ; name ; ConnectId
-		print ("Unity  Test DeviceInfo = "+deviceInfo);
+#if UNITY_IOS
+    void OnUpdateDeviceInfo(string value){
+        //deviceFound deviceInfo = NSF4F1BF;MindWave Mobile;BAFCEB11-2DB6-70B3-B038-B4AD2EFC6309
+        // FMGID ; name ; ConnectId
+        DeviceInfo = value;
 	}
+#endif
 
     /**
 	 *when Fixed Timestep == 0.02 
@@ -217,7 +239,14 @@ public class DisplayData : MonoBehaviour {
         GUILayout.Label("Alpha:" + Algo_Alpha);
         GUILayout.Label("Beta:" + Algo_Beta);
         GUILayout.Label("Gamma:" + Algo_Gamma);
-
+        GUILayout.Label("");
+        GUILayout.Label("");
+#if UNITY_ANDROID
+        GUILayout.Label("ConnectionState:" + ConnectionState);
+#endif
+#if UNITY_IOS
+        GUILayout.Label("DeviceInfo" + DeviceInfo);
+#endif
         GUILayout.EndVertical();
 	}	
 }

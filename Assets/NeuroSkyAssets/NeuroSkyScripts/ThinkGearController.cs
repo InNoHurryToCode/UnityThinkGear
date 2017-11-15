@@ -7,7 +7,9 @@ public class ThinkGearController : MonoBehaviour {
 	public delegate void UpdateFloatValueDelegate(float value);
 	public delegate void UpdateStringValueDelegate(string value);
 
-	public event UpdateStringValueDelegate UpdateConnectStateEvent;
+#if UNITY_ANDROID
+    public event UpdateStringValueDelegate UpdateConnectStateEvent;
+#endif
 	
 	public event UpdateIntValueDelegate UpdatePoorSignalEvent;
 	public event UpdateIntValueDelegate UpdateAttentionEvent;
@@ -24,7 +26,9 @@ public class ThinkGearController : MonoBehaviour {
 	public event UpdateFloatValueDelegate UpdateLowGammaEvent;
 	public event UpdateFloatValueDelegate UpdateHighGammaEvent;
 
-	public event UpdateStringValueDelegate UpdateDeviceInfoEvent;
+#if UNITY_IOS
+    public event UpdateStringValueDelegate UpdateDeviceInfoEvent;
+#endif
 
     public event UpdateIntValueDelegate Algo_UpdateAttentionEvent;
     public event UpdateIntValueDelegate Algo_UpdateMeditationEvent;
@@ -193,8 +197,9 @@ public class ThinkGearController : MonoBehaviour {
 			UpdateHighGammaEvent(float.Parse(value));
 		}
 	}
-	//Tommy add 20161012
-	void receiveDeviceInfo (string deviceInfo){
+
+#if UNITY_IOS
+    void receiveDeviceInfo (string deviceInfo){
 
 		print ("!!! Unity deviceInfo :"+deviceInfo);
 		if (UpdateDeviceInfoEvent != null) {
@@ -202,6 +207,7 @@ public class ThinkGearController : MonoBehaviour {
 		}
 
 	}
+#endif
 
     void receiveEEGAlgorithmValue(string keyValue)
     {
