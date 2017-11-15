@@ -39,11 +39,13 @@ public class ThinkGearController : MonoBehaviour {
 	private bool sendEEGEnable = false;
 	private bool sendESenseEnable = true;
 	private bool sendBlinkEnable = true;
-	
-	void Awake(){
+
+    private bool checkUpdate = true;
+
+    void Awake(){
 		UnityThinkGear.Init(true);
-		InvokeRepeating("CheckUpdateEvent",0.0f,1.0f);
-	}
+        StartCoroutine(CheckUpdateCoroutine());
+    }
 	// Use this for initialization
 	void Start () {
 	
@@ -52,57 +54,73 @@ public class ThinkGearController : MonoBehaviour {
 		sendESenseEnable = UnityThinkGear.GetSendESenseEnable();
 		sendBlinkEnable = UnityThinkGear.GetSendBlinkEnable();
 	}
-	
-	void CheckUpdateEvent(){
-		if(!sendRawEnable && (UpdateRawdataEvent != null)){
-			sendRawEnable = true;
-			UnityThinkGear.SetSendRawEnable(true);
-		}
-		if(sendRawEnable && UpdateRawdataEvent == null){
-			sendRawEnable = false;
-			UnityThinkGear.SetSendRawEnable(false);
-		}
-		
-		if(!sendEEGEnable && 
-		   (UpdateDeltaEvent != null || UpdateThetaEvent != null ||
-		   UpdateLowAlphaEvent != null || UpdateLowBetaEvent != null || 
-		   UpdateLowGammaEvent != null || UpdateHighAlphaEvent != null ||
-		   UpdateHighBetaEvent != null || UpdateHighGammaEvent != null)){
-			sendEEGEnable = true;
-			UnityThinkGear.SetSendEEGEnable(true);
-		}
-		if(sendEEGEnable && 
-		   UpdateDeltaEvent == null && UpdateThetaEvent == null && 
-		   UpdateLowAlphaEvent == null && UpdateLowBetaEvent == null && 
-		   UpdateLowGammaEvent == null && UpdateHighAlphaEvent == null && 
-		   UpdateHighBetaEvent == null && UpdateHighGammaEvent == null){
-			sendEEGEnable = false;
-			UnityThinkGear.SetSendEEGEnable(false);
-		}
-		
-		if(!sendESenseEnable &&
-		   (UpdateAttentionEvent != null || UpdateMeditationEvent != null)){
-			sendESenseEnable = true;
-			UnityThinkGear.SetSendESenseEnable(true);
-		}
-		if(sendESenseEnable &&
-		   UpdateAttentionEvent == null && UpdateMeditationEvent == null){
-			sendESenseEnable = false;
-			UnityThinkGear.SetSendESenseEnable(false);
-		}
-		
-		if(!sendBlinkEnable && (UpdateBlinkEvent != null)){
-			sendBlinkEnable = true;
-			UnityThinkGear.SetSendBlinkEnable(true);
-		}
-		if(sendBlinkEnable && UpdateBlinkEvent == null){
-			sendBlinkEnable = false;
-			UnityThinkGear.SetSendBlinkEnable(false);
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    IEnumerator CheckUpdateCoroutine()
+    {
+        while (checkUpdate)
+        {
+            if (!sendRawEnable && (UpdateRawdataEvent != null))
+            {
+                sendRawEnable = true;
+                UnityThinkGear.SetSendRawEnable(true);
+            }
+
+            if (sendRawEnable && UpdateRawdataEvent == null)
+            {
+                sendRawEnable = false;
+                UnityThinkGear.SetSendRawEnable(false);
+            }
+
+            if (!sendEEGEnable &&
+            (UpdateDeltaEvent != null || UpdateThetaEvent != null ||
+            UpdateLowAlphaEvent != null || UpdateLowBetaEvent != null ||
+            UpdateLowGammaEvent != null || UpdateHighAlphaEvent != null ||
+            UpdateHighBetaEvent != null || UpdateHighGammaEvent != null))
+            {
+                sendEEGEnable = true;
+                UnityThinkGear.SetSendEEGEnable(true);
+            }
+
+            if (sendEEGEnable &&
+            UpdateDeltaEvent == null && UpdateThetaEvent == null &&
+            UpdateLowAlphaEvent == null && UpdateLowBetaEvent == null &&
+            UpdateLowGammaEvent == null && UpdateHighAlphaEvent == null &&
+            UpdateHighBetaEvent == null && UpdateHighGammaEvent == null)
+            {
+                sendEEGEnable = false;
+                UnityThinkGear.SetSendEEGEnable(false);
+            }
+
+            if (!sendESenseEnable && (UpdateAttentionEvent != null || UpdateMeditationEvent != null))
+            {
+                sendESenseEnable = true;
+                UnityThinkGear.SetSendESenseEnable(true);
+            }
+
+            if (sendESenseEnable && UpdateAttentionEvent == null && UpdateMeditationEvent == null)
+            {
+                sendESenseEnable = false;
+                UnityThinkGear.SetSendESenseEnable(false);
+            }
+
+            if (!sendBlinkEnable && (UpdateBlinkEvent != null))
+            {
+                sendBlinkEnable = true;
+                UnityThinkGear.SetSendBlinkEnable(true);
+            }
+
+            if (sendBlinkEnable && UpdateBlinkEvent == null)
+            {
+                sendBlinkEnable = false;
+                UnityThinkGear.SetSendBlinkEnable(false);
+            }
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 		
 	}
@@ -265,7 +283,8 @@ public class ThinkGearController : MonoBehaviour {
 
 
 	void OnApplicationQuit(){
-		UnityThinkGear.StopStream();
+        checkUpdate = false;
+        UnityThinkGear.StopStream();
 		UnityThinkGear.Close();
 		
 	}
