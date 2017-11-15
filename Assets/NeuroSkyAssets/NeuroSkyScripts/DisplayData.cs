@@ -33,20 +33,6 @@ public class DisplayData : MonoBehaviour {
     private float Algo_Beta = 0.0f;
     private float Algo_Gamma = 0.0f;
 
-
-
-    //Tommy add 20161020
-    private bool showListViewFlag = false;
-	private ArrayList deviceList;
-	private ArrayList displayedStrArr;
-	Vector2 scrollPosition ;
-	Rect windowRect ;
-
-	float rectX = 0;
-	float rectY = 0;
-	float rectWidth = 0;
-	float rectHeight = 0;
-
 	// Use this for initialization
 	void Start () {
 		controller = GameObject.Find("ThinkGear").GetComponent<ThinkGearController>();
@@ -77,18 +63,6 @@ public class DisplayData : MonoBehaviour {
         controller.Algo_UpdateAlphaEvent += OnAlgo_UpdateAlphaEvent;
         controller.Algo_UpdateBetaEvent += OnAlgo_UpdateBetaEvent;
         controller.Algo_UpdateGammaEvent += OnAlgo_UpdateGammaEvent;
-
-
-
-
-    deviceList = new ArrayList();
-		displayedStrArr = new ArrayList();
-		rectX = Screen.width / 10;
-		rectY = Screen.height / 3;
-		rectWidth = Screen.width * 8 / 10;
-		rectHeight = Screen.height / 4;
-			
-		
 	}
 
     void OnAlgo_UpdateAttentionEvent(int value)
@@ -180,35 +154,6 @@ public class DisplayData : MonoBehaviour {
 		//deviceFound deviceInfo = NSF4F1BF;MindWave Mobile;BAFCEB11-2DB6-70B3-B038-B4AD2EFC6309
 		// FMGID ; name ; ConnectId
 		print ("Unity  Test DeviceInfo = "+deviceInfo);
-		Add2DeviceListArray(deviceInfo);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-		#if UNITY_IPHONE
-		//当触摸到了列表以外的地方  消失列表
-		// 不与Connect按钮位置 重复
-		if (Input.touchCount > 0) {
-//			print ("Screen.width : "+Screen.width+ "Screen.height : " +Screen.height);
-//			print ("Touch Position x : "+Input.GetTouch(0).position.x + " y : "+Input.GetTouch(0).position.y);
-			if (
-				Input.GetTouch (0).position.x >= rectX && Input.GetTouch (0).position.x <= (rectX + rectWidth)
-				&& Input.GetTouch (0).position.y >= (Screen.height - rectY- rectHeight) && Input.GetTouch (0).position.y <= (Screen.height - rectY )) {
-
-			} else if (Input.GetTouch (0).position.x <= 290 && Input.GetTouch (0).position.x >= 190 &&
-			          Input.GetTouch (0).position.y >= (Screen.height - 140 - 80) && Input.GetTouch (0).position.y <= (Screen.height - 140)) {
-				
-//				print(" Click Connect Button Frame");
-			} else {
-				print("blank place Click ; dismiss list view");
-
-				dismissListView();
-			}
-
-		}
-
-		#endif
 	}
 	
 	/**
@@ -237,29 +182,14 @@ public class DisplayData : MonoBehaviour {
 		
 		if(GUI.Button(new Rect(190,140,100,80),"Connect")){
 			print("Connect Button CLick");
-			#if UNITY_IPHONE
-			clearDataArr();
-			UnityThinkGear.ScanDevice();
-			showListViewFlag = true;
-
-			#elif UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_IPHONE
 			UnityThinkGear.StartStream();
+#endif
 
-			#endif
+        }
 
-		}
-		
-		if(GUI.Button(new Rect(190,250,100,80),"Quit")){
+        if (GUI.Button(new Rect(190,250,100,80),"Quit")){
 			Application.Quit();
-		}
-
-		if(showListViewFlag){
-
-			//andrew code;  show device list view;
-			GUILayout.BeginArea (new Rect (rectX,rectY,rectWidth,rectHeight));
-			windowRect = GUILayout.Window (0, new Rect (rectX,rectY,rectWidth,rectHeight), DeviceListWindow, "Device List");
-			GUILayout.EndArea ();
-
 		}
 
 		
@@ -290,78 +220,4 @@ public class DisplayData : MonoBehaviour {
 
         GUILayout.EndVertical();
 	}	
-
-	void DeviceListWindow (int windowID) {
-		var buttonStyle= new GUIStyle("Button");
-		buttonStyle.fontSize = 40;
-
-	
-		scrollPosition = GUILayout.BeginScrollView (scrollPosition, GUILayout.Width (rectWidth) , GUILayout.Height (rectHeight));
-		for(int i = 0; i < deviceList.Count; i++) {
-			if(GUILayout.Button (displayedStrArr[i]+"", buttonStyle)) {
-				print("Click "+deviceList[i]);
-				#if UNITY_IPHONE
-				UnityThinkGear.ConnectDevice(deviceList[i]+"");
-				#endif
-				dismissListView();
-			}
-		}
-
-		// End the scrollview we began above.
-		GUILayout.EndScrollView ();
-	}
-
-	void dismissListView(){
-
-		showListViewFlag = false;
-		clearDataArr();
-	}
-
-	void clearDataArr(){
-
-		deviceList.Clear();
-		displayedStrArr.Clear();
-	}
-
-	//添加到数组，不添加重复的对象
-	void Add2DeviceListArray(string element){
-		string mfgid = "";
-		string name = "";
-		string deviceId = "";
-
-		mfgid = element.Split(";"[0])[0];
-		name = element.Split(";"[0])[1];
-		deviceId = element.Split(";"[0])[2];
-		print("Add2DeviceListArray  mfgid : "+mfgid + " name: "+name+" deviceId: "+deviceId);
-
-		int  deviceCount = 0;
-		deviceCount = deviceList.Count;
-		print("deviceCount : "+deviceCount);
-		if(deviceCount > 0){
-            for(int i = 0; i < deviceList.Count; i++) {
-				if(deviceList[i] == deviceId){
-					break;
-				}
-				else{
-					displayedStrArr.Add(mfgid+" "+name);
-					deviceList.Add(deviceId);
-					break;
-				}
-
-			}
-
-		}
-		else{
-			displayedStrArr.Add(mfgid+" "+name);
-			deviceList.Add(deviceId);
-		}
-
-
-		print("deviceList : "+deviceList);
-		print("displayedStrArr : "+displayedStrArr);
-
-
-	}
-
-
 }
