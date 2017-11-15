@@ -1,252 +1,270 @@
 using UnityEngine;
-using System.Collections;
 
-public class DisplayData : MonoBehaviour {
-	
-	public Texture2D[] signalIcons;
-	
-	private float indexSignalIcons = 1;
-	private bool enableAnimation = false;
-	private float animationInterval = 0.06f;
-	
-    ThinkGearController controller;
-	
-	private int Raw = 0;
-	private int PoorSignal = 200;
-	private int Attention = 0;
-	private int Meditation = 0;
-	private int Blink = 0;
-	private float Delta = 0.0f;
-	private float Theta = 0.0f;
-	private float LowAlpha = 0.0f;
-	private float HighAlpha = 0.0f;
-	private float LowBeta = 0.0f;
-	private float HighBeta = 0.0f;
-	private float LowGamma = 0.0f;
-	private float HighGamma = 0.0f;
+public class DisplayData : MonoBehaviour
+{
+    private ThinkGearController controller;
 
-    private int Algo_Attention = 0;
-    private int Algo_Meditation = 0;
-    private float Algo_Delta = 0.0f;
-    private float Algo_Theta = 0.0f;
-    private float Algo_Alpha = 0.0f;
-    private float Algo_Beta = 0.0f;
-    private float Algo_Gamma = 0.0f;
+    #if UNITY_ANDROID
+    private string connectionState = "";
+    #elif UNITY_IOS
+    private string deviceInfo = "";
+    #endif
+    private int poorSignal = 200;
+    private int attention = 0;
+    private int meditation = 0;
+    private int raw = 0;
+    private int blink = 0;
+    private float delta = 0.0f;
+    private float theta = 0.0f;
+    private float lowAlpha = 0.0f;
+    private float highAlpha = 0.0f;
+    private float lowBeta = 0.0f;
+    private float highBeta = 0.0f;
+    private float lowGamma = 0.0f;
+	private float highGamma = 0.0f;
+    private int algoAttention = 0;
+    private int algoMeditation = 0;
+    private float algoDelta = 0.0f;
+    private float algoTheta = 0.0f;
+    private float algoAlpha = 0.0f;
+    private float algoBeta = 0.0f;
+    private float algoGamma = 0.0f;
 
-#if UNITY_ANDROID
-    private string ConnectionState = "";
-#endif
-#if UNITY_IOS
-    private string DeviceInfo = "";
-#endif
+    public Texture2D[] SignalIcons;
+    private float indexSignalIcons = 1;
+    private bool enableAnimation = false;
+    private float animationInterval = 0.06f;
 
-	// Use this for initialization
-	void Start () {
-		controller = GameObject.Find("ThinkGear").GetComponent<ThinkGearController>();
+    void Start()
+    {
+        controller = GameObject.Find("ThinkGear").GetComponent<ThinkGearController>();
 
-		controller.UpdateRawdataEvent += OnUpdateRaw;
-		controller.UpdatePoorSignalEvent += OnUpdatePoorSignal;
-		controller.UpdateAttentionEvent += OnUpdateAttention;
-		controller.UpdateMeditationEvent += OnUpdateMeditation;
-		
-		controller.UpdateDeltaEvent += OnUpdateDelta;
-		controller.UpdateThetaEvent += OnUpdateTheta;
-
-		controller.UpdateHighAlphaEvent += OnUpdateHighAlpha;
-		controller.UpdateHighBetaEvent += OnUpdateHighBeta;
-		controller.UpdateHighGammaEvent += OnUpdateHighGamma;
-
-		controller.UpdateLowAlphaEvent += OnUpdateLowAlpha;
-		controller.UpdateLowBetaEvent += OnUpdateLowBeta;
-		controller.UpdateLowGammaEvent += OnUpdateLowGamma;
-
-		controller.UpdateBlinkEvent += OnUpdateBlink;
-
-#if UNITY_ANDROID
+        #if UNITY_ANDROID
         controller.UpdateConnectStateEvent += OnUpdateConnectionState;
-#endif
-
-#if UNITY_IOS
+        #elif UNITY_IOS
         controller.UpdateDeviceInfoEvent += OnUpdateDeviceInfo;
-#endif
-
-        controller.Algo_UpdateAttentionEvent += OnAlgo_UpdateAttentionEvent;
-        controller.Algo_UpdateMeditationEvent += OnAlgo_UpdateMeditationEvent;
-        controller.Algo_UpdateDeltaEvent += OnAlgo_UpdateDeltaEvent;
-        controller.Algo_UpdateThetaEvent += OnAlgo_UpdateThetaEvent;
-        controller.Algo_UpdateAlphaEvent += OnAlgo_UpdateAlphaEvent;
-        controller.Algo_UpdateBetaEvent += OnAlgo_UpdateBetaEvent;
-        controller.Algo_UpdateGammaEvent += OnAlgo_UpdateGammaEvent;
-	}
-
-    void OnAlgo_UpdateAttentionEvent(int value)
-    {
-        Algo_Attention = value;
-    }
-    void OnAlgo_UpdateMeditationEvent(int value)
-    {
-        Algo_Meditation = value;
-
-    }
-
-    void OnAlgo_UpdateDeltaEvent(float value)
-    {
-        Algo_Delta = value;
-    }
-    void OnAlgo_UpdateThetaEvent(float value)
-    {
-        Algo_Theta = value;
-    }
-    void OnAlgo_UpdateAlphaEvent(float value)
-    {
-        Algo_Alpha = value;
-    }
-    void OnAlgo_UpdateBetaEvent(float value)
-    {
-        Algo_Beta = value;
-    }
-    void OnAlgo_UpdateGammaEvent(float value)
-    {
-        Algo_Gamma = value;
+        #endif
+        controller.UpdatePoorSignalEvent += OnUpdatePoorSignal;
+        controller.UpdateAttentionEvent += OnUpdateAttention;
+        controller.UpdateMeditationEvent += OnUpdateMeditation;
+        controller.UpdateRawdataEvent += OnUpdateRaw;
+        controller.UpdateBlinkEvent += OnUpdateBlink;
+        controller.UpdateDeltaEvent += OnUpdateDelta;
+        controller.UpdateThetaEvent += OnUpdateTheta;
+        controller.UpdateLowAlphaEvent += OnUpdateLowAlpha;
+        controller.UpdateHighAlphaEvent += OnUpdateHighAlpha;
+        controller.UpdateLowBetaEvent += OnUpdateLowBeta;
+        controller.UpdateHighBetaEvent += OnUpdateHighBeta;
+        controller.UpdateLowGammaEvent += OnUpdateLowGamma;
+        controller.UpdateHighGammaEvent += OnUpdateHighGamma;
+        controller.UpdateAlgoAttentionEvent += OnUpdateAlgoAttentionEvent;
+        controller.UpdateAlgoMeditationEvent += OnUpdateAlgoMeditationEvent;
+        controller.UpdateAlgoDeltaEvent += OnUpdateAlgoDeltaEvent;
+        controller.UpdateAlgoThetaEvent += OnUpdateAlgoThetaEvent;
+        controller.UpdateAlgoAlphaEvent += OnUpdateAlgoAlphaEvent;
+        controller.UpdateAlgoBetaEvent += OnUpdateAlgoBetaEvent;
+        controller.UpdateAlgoGammaEvent += OnUpdateAlgoGammaEvent;
     }
 
-
-    void OnUpdatePoorSignal(int value){
-		PoorSignal = value;
-		if(value == 0){
-      		indexSignalIcons = 0;
-			enableAnimation = false;
-		}else if(value == 200){
-      		indexSignalIcons = 1;
-			enableAnimation = false;
-		}else if(!enableAnimation){
-			indexSignalIcons = 2;
-			enableAnimation = true;
-		}
-	}
-	void OnUpdateRaw(int value){
-		Raw = value;
-	}
-	void OnUpdateAttention(int value){
-		Attention = value;
-	}
-	void OnUpdateMeditation(int value){
-		Meditation = value;
-
-	}
-	void OnUpdateDelta(float value){
-		Delta = value;
-	}
-	void OnUpdateTheta(float value){
-		Theta = value;
-	}
-	void OnUpdateHighAlpha(float value){
-		HighAlpha = value;
-	}
-	void OnUpdateHighBeta(float value){
-		HighBeta = value;
-	}
-	void OnUpdateHighGamma(float value){
-		HighGamma = value;
-	}
-	void OnUpdateLowAlpha(float value){
-		LowAlpha = value;
-	}
-	void OnUpdateLowBeta(float value){
-		LowBeta = value;
-	}
-	void OnUpdateLowGamma(float value){
-		LowGamma = value;
-	}
-
-	void OnUpdateBlink(int value){
-		Blink = value;
-	}
-
-#if UNITY_ANDROID
+    #if UNITY_ANDROID
     void OnUpdateConnectionState(string value)
     {
-        ConnectionState = value;
+        connectionState = value;
     }
-#endif
+    #elif UNITY_IOS
+    void OnUpdateDeviceInfo(string value)
+    {
+       deviceInfo = value;
+    }
+    #endif
 
-#if UNITY_IOS
-    void OnUpdateDeviceInfo(string value){
-        //deviceFound deviceInfo = NSF4F1BF;MindWave Mobile;BAFCEB11-2DB6-70B3-B038-B4AD2EFC6309
-        // FMGID ; name ; ConnectId
-        DeviceInfo = value;
-	}
-#endif
+    void OnUpdatePoorSignal(int value)
+    {
+        poorSignal = value;
 
-    /**
-	 *when Fixed Timestep == 0.02 
-	 **/
-    void FixedUpdate(){
-		if(enableAnimation){
-			if(indexSignalIcons >= 4.8){
-				indexSignalIcons = 2;
-			}
-			indexSignalIcons += animationInterval;
-		}
-		
-	}
-	
-	void OnGUI(){
-		GUILayout.BeginHorizontal();
-		GUILayout.Label("Demo App");
-		GUILayout.Space(Screen.width-250);
-		GUILayout.Label(signalIcons[(int)indexSignalIcons]);
-		GUILayout.EndHorizontal();
-		
-		if(GUI.Button( new Rect(190,20,100,80),"Init")){
-			UnityThinkGear.Init(true);
-		}
-		
-		if(GUI.Button(new Rect(190,140,100,80),"Connect")){
-			print("Connect Button CLick");
-#if UNITY_ANDROID || UNITY_IOS
-			UnityThinkGear.StartStream();
-#endif
+        if (value == 0)
+        {
+            indexSignalIcons = 0;
+            enableAnimation = false;
+        }
+        else if (value == 200)
+        {
+            indexSignalIcons = 1;
+            enableAnimation = false;
+        }
+        else if (!enableAnimation)
+        {
+            indexSignalIcons = 2;
+            enableAnimation = true;
+        }
+    }
 
+    void OnUpdateAttention(int value)
+    {
+        attention = value;
+    }
+
+    void OnUpdateMeditation(int value)
+    {
+        meditation = value;
+    }
+
+    void OnUpdateRaw(int value)
+    {
+        raw = value;
+    }
+
+    void OnUpdateBlink(int value)
+    {
+        blink = value;
+    }
+
+    void OnUpdateDelta(float value)
+    {
+        delta = value;
+    }
+
+    void OnUpdateTheta(float value)
+    {
+        theta = value;
+    }
+
+    void OnUpdateLowAlpha(float value)
+    {
+        lowAlpha = value;
+    }
+
+    void OnUpdateHighAlpha(float value)
+    {
+        highAlpha = value;
+    }
+
+    void OnUpdateLowBeta(float value)
+    {
+        lowBeta = value;
+    }
+
+    void OnUpdateHighBeta(float value)
+    {
+        highBeta = value;
+    }
+
+    void OnUpdateLowGamma(float value)
+    {
+        lowGamma = value;
+    }
+
+    void OnUpdateHighGamma(float value)
+    {
+        highGamma = value;
+    }
+
+    void OnUpdateAlgoAttentionEvent(int value)
+    {
+        algoAttention = value;
+    }
+
+    void OnUpdateAlgoMeditationEvent(int value)
+    {
+        algoMeditation = value;
+    }
+
+    void OnUpdateAlgoDeltaEvent(float value)
+    {
+        algoDelta = value;
+    }
+
+    void OnUpdateAlgoThetaEvent(float value)
+    {
+        algoTheta = value;
+    }
+
+    void OnUpdateAlgoAlphaEvent(float value)
+    {
+        algoAlpha = value;
+    }
+
+    void OnUpdateAlgoBetaEvent(float value)
+    {
+        algoBeta = value;
+    }
+
+    void OnUpdateAlgoGammaEvent(float value)
+    {
+        algoGamma = value;
+    }
+
+    void FixedUpdate()
+    {
+        if (enableAnimation)
+        {
+            if (indexSignalIcons >= 4.8)
+            {
+                indexSignalIcons = 2;
+            }
+
+            indexSignalIcons += animationInterval;
+        }
+    }
+
+    void OnGUI()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Demo App");
+        GUILayout.Space(Screen.width - 250);
+        GUILayout.Label(SignalIcons[(int)indexSignalIcons]);
+        GUILayout.EndHorizontal();
+
+        if (GUI.Button(new Rect(190, 20, 100, 80), "Init"))
+        {
+            Debug.Log("Init Button Click");
+            UnityThinkGear.Init(true);
         }
 
-        if (GUI.Button(new Rect(190,250,100,80),"Quit")){
-			Application.Quit();
-		}
+        if (GUI.Button(new Rect(190, 140, 100, 80), "Connect"))
+        {
+            Debug.Log("Connect Button Click");
+            #if UNITY_ANDROID || UNITY_IOS
+            UnityThinkGear.StartStream();
+            #endif
+        }
 
-		
-		GUILayout.BeginVertical();
-		GUILayout.Label("Raw:" + Raw);
-		GUILayout.Label("PoorSignal:" + PoorSignal);
-		GUILayout.Label("Attention:" + Attention);
-		GUILayout.Label("Meditation:" + Meditation);
-		GUILayout.Label("Blink:" + Blink);
-		GUILayout.Label("Delta:" + Delta);
-		GUILayout.Label("Theta:" + Theta);
-		GUILayout.Label("LowAlpha:" + LowAlpha);
-		GUILayout.Label("HighAlpha:" + HighAlpha);
-		GUILayout.Label("LowBeta:" + LowBeta);
-		GUILayout.Label("HighBeta:" + HighBeta);
-		GUILayout.Label("LowGamma:" + LowGamma);
-		GUILayout.Label("HighGamma:" + HighGamma);
+        if (GUI.Button(new Rect(190, 250, 100, 80), "Quit"))
+        {
+            Application.Quit();
+        }
+
+        GUILayout.BeginVertical();
+        GUILayout.Label("Raw:" + raw);
+        GUILayout.Label("PoorSignal:" + poorSignal);
+        GUILayout.Label("Attention:" + attention);
+        GUILayout.Label("Meditation:" + meditation);
+        GUILayout.Label("Blink:" + blink);
+        GUILayout.Label("Delta:" + delta);
+        GUILayout.Label("Theta:" + theta);
+        GUILayout.Label("LowAlpha:" + lowAlpha);
+        GUILayout.Label("HighAlpha:" + highAlpha);
+        GUILayout.Label("LowBeta:" + lowBeta);
+        GUILayout.Label("HighBeta:" + highBeta);
+        GUILayout.Label("LowGamma:" + lowGamma);
+        GUILayout.Label("HighGamma:" + highGamma);
         GUILayout.Label("");
         GUILayout.Label("");
         GUILayout.Label("EEG Algorithm output values");
-        GUILayout.Label("Attention:" + Algo_Attention);
-        GUILayout.Label("Meditation:" + Algo_Meditation);
-        GUILayout.Label("Delta:" + Algo_Delta);
-        GUILayout.Label("Theta:" + Algo_Theta);
-        GUILayout.Label("Alpha:" + Algo_Alpha);
-        GUILayout.Label("Beta:" + Algo_Beta);
-        GUILayout.Label("Gamma:" + Algo_Gamma);
+        GUILayout.Label("Attention:" + algoAttention);
+        GUILayout.Label("Meditation:" + algoMeditation);
+        GUILayout.Label("Delta:" + algoDelta);
+        GUILayout.Label("Theta:" + algoTheta);
+        GUILayout.Label("Alpha:" + algoAlpha);
+        GUILayout.Label("Beta:" + algoBeta);
+        GUILayout.Label("Gamma:" + algoGamma);
         GUILayout.Label("");
         GUILayout.Label("");
-#if UNITY_ANDROID
-        GUILayout.Label("ConnectionState:" + ConnectionState);
-#endif
-#if UNITY_IOS
-        GUILayout.Label("DeviceInfo" + DeviceInfo);
-#endif
+        #if UNITY_ANDROID
+        GUILayout.Label("ConnectionState:" + connectionState);
+        #elif UNITY_IOS
+        GUILayout.Label("DeviceInfo" + deviceInfo);
+        #endif
         GUILayout.EndVertical();
-	}	
+    }	
 }

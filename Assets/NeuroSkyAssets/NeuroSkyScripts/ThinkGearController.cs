@@ -1,63 +1,57 @@
 using UnityEngine;
 using System.Collections;
 
-public class ThinkGearController : MonoBehaviour {
-	
-	public delegate void UpdateIntValueDelegate(int value);
-	public delegate void UpdateFloatValueDelegate(float value);
-	public delegate void UpdateStringValueDelegate(string value);
+public class ThinkGearController : MonoBehaviour
+{
+    public delegate void UpdateStringDelegate(string value);
+    public delegate void UpdateIntDelegate(int value);
+    public delegate void UpdateFloatDelegate(float value);
 
-#if UNITY_ANDROID
-    public event UpdateStringValueDelegate UpdateConnectStateEvent;
-#endif
-	
-	public event UpdateIntValueDelegate UpdatePoorSignalEvent;
-	public event UpdateIntValueDelegate UpdateAttentionEvent;
-	public event UpdateIntValueDelegate UpdateMeditationEvent;
-	public event UpdateIntValueDelegate UpdateRawdataEvent;
-	public event UpdateIntValueDelegate UpdateBlinkEvent;
-	
-	public event UpdateFloatValueDelegate UpdateDeltaEvent;
-	public event UpdateFloatValueDelegate UpdateThetaEvent;
-	public event UpdateFloatValueDelegate UpdateLowAlphaEvent;
-	public event UpdateFloatValueDelegate UpdateHighAlphaEvent;
-	public event UpdateFloatValueDelegate UpdateLowBetaEvent;
-	public event UpdateFloatValueDelegate UpdateHighBetaEvent;
-	public event UpdateFloatValueDelegate UpdateLowGammaEvent;
-	public event UpdateFloatValueDelegate UpdateHighGammaEvent;
-
-#if UNITY_IOS
-    public event UpdateStringValueDelegate UpdateDeviceInfoEvent;
-#endif
-
-    public event UpdateIntValueDelegate Algo_UpdateAttentionEvent;
-    public event UpdateIntValueDelegate Algo_UpdateMeditationEvent;
-    public event UpdateFloatValueDelegate Algo_UpdateDeltaEvent;
-    public event UpdateFloatValueDelegate Algo_UpdateThetaEvent;
-    public event UpdateFloatValueDelegate Algo_UpdateAlphaEvent;
-    public event UpdateFloatValueDelegate Algo_UpdateBetaEvent;
-    public event UpdateFloatValueDelegate Algo_UpdateGammaEvent;
-
+    #if UNITY_ANDROID
+    public event UpdateStringDelegate UpdateConnectStateEvent;
+    #elif UNITY_IOS
+    public event UpdateStringDelegate UpdateDeviceInfoEvent;
+    #endif
+    public event UpdateIntDelegate UpdatePoorSignalEvent;
+    public event UpdateIntDelegate UpdateAttentionEvent;
+    public event UpdateIntDelegate UpdateMeditationEvent;
+    public event UpdateIntDelegate UpdateRawdataEvent;
+    public event UpdateIntDelegate UpdateBlinkEvent;
+    public event UpdateFloatDelegate UpdateDeltaEvent;
+    public event UpdateFloatDelegate UpdateThetaEvent;
+    public event UpdateFloatDelegate UpdateLowAlphaEvent;
+    public event UpdateFloatDelegate UpdateHighAlphaEvent;
+    public event UpdateFloatDelegate UpdateLowBetaEvent;
+    public event UpdateFloatDelegate UpdateHighBetaEvent;
+    public event UpdateFloatDelegate UpdateLowGammaEvent;
+    public event UpdateFloatDelegate UpdateHighGammaEvent;
+    public event UpdateIntDelegate UpdateAlgoAttentionEvent;
+    public event UpdateIntDelegate UpdateAlgoMeditationEvent;
+    public event UpdateFloatDelegate UpdateAlgoDeltaEvent;
+    public event UpdateFloatDelegate UpdateAlgoThetaEvent;
+    public event UpdateFloatDelegate UpdateAlgoAlphaEvent;
+    public event UpdateFloatDelegate UpdateAlgoBetaEvent;
+    public event UpdateFloatDelegate UpdateAlgoGammaEvent;
 
     private bool sendRawEnable = false;
-	private bool sendEEGEnable = false;
-	private bool sendESenseEnable = true;
-	private bool sendBlinkEnable = true;
-
+    private bool sendEEGEnable = false;
+    private bool sendESenseEnable = true;
+    private bool sendBlinkEnable = true;
     private bool checkUpdate = true;
 
-    void Awake(){
-		UnityThinkGear.Init(true);
+    void Awake()
+    {
+        UnityThinkGear.Init(true);
         StartCoroutine(CheckUpdateCoroutine());
     }
-	// Use this for initialization
-	void Start () {
-	
-		sendRawEnable = UnityThinkGear.GetSendRawEnable();
-		sendEEGEnable = UnityThinkGear.GetSendEEGEnable();
-		sendESenseEnable = UnityThinkGear.GetSendESenseEnable();
-		sendBlinkEnable = UnityThinkGear.GetSendBlinkEnable();
-	}
+
+    void Start ()
+    {
+        sendRawEnable = UnityThinkGear.GetSendRawEnable();
+        sendEEGEnable = UnityThinkGear.GetSendEEGEnable();
+        sendESenseEnable = UnityThinkGear.GetSendESenseEnable();
+        sendBlinkEnable = UnityThinkGear.GetSendBlinkEnable();
+    }
 
     IEnumerator CheckUpdateCoroutine()
     {
@@ -123,178 +117,190 @@ public class ThinkGearController : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-	
-		
-	}
-	
-	void receiveRawdata(string value){
-		if(UpdateRawdataEvent != null){
-			UpdateRawdataEvent(int.Parse(value));
-		}
-	}
-	
-	void receiveBlink(string value){
-		if(UpdateBlinkEvent != null){
-			UpdateBlinkEvent(int.Parse(value));
-		}
-	}
-	
-	
-	void receivePoorSignal(string value){
-		if(UpdatePoorSignalEvent != null){
-			UpdatePoorSignalEvent(int.Parse(value));
-		}
-	}
-	void receiveAttention(string value){
-		if(UpdateAttentionEvent != null){
-			UpdateAttentionEvent(int.Parse(value));
-		}
-	}
-	void receiveMeditation(string value){
-		if(UpdateMeditationEvent != null){
-			UpdateMeditationEvent(int.Parse(value));
-		}
-	}
-	void receiveDelta(string value){
-		if(UpdateDeltaEvent != null){
-			UpdateDeltaEvent(float.Parse(value));
-		}
-	}
-	void receiveTheta(string value){
-		if(UpdateThetaEvent != null){
-			UpdateThetaEvent(float.Parse(value));
-		}
-	}
-	void receiveLowAlpha(string value){
-		if(UpdateLowAlphaEvent != null){
-			UpdateLowAlphaEvent(float.Parse(value));
-		}
-	}
-	void receiveHighAlpha(string value){
-		if(UpdateHighAlphaEvent != null){
-			UpdateHighAlphaEvent(float.Parse(value));
-		}
-	}
-	void receiveLowBeta(string value){
-		if(UpdateLowBetaEvent != null){
-			UpdateLowBetaEvent(float.Parse(value));
-		}
-	}
-	void receiveHighBeta(string value){
-		if(UpdateHighBetaEvent != null){
-			UpdateHighBetaEvent(float.Parse(value));
-		}
-	}
-	void receiveLowGamma(string value){
-		if(UpdateLowGammaEvent != null){
-			UpdateLowGammaEvent(float.Parse(value));
-		}
-	}
-	void receiveHighGamma(string value){
-		if(UpdateHighGammaEvent != null){
-			UpdateHighGammaEvent(float.Parse(value));
-		}
-	}
-
-#if UNITY_IOS
-    void receiveDeviceInfo (string deviceInfo){
-
-		print ("!!! Unity deviceInfo :"+deviceInfo);
-		if (UpdateDeviceInfoEvent != null) {
-			UpdateDeviceInfoEvent (deviceInfo);
-		}
-
-	}
-#endif
-
-    void receiveEEGAlgorithmValue(string keyValue)
+    #if UNITY_ANDROID
+    void receiveConnectState1(string value)
     {
-        string[] strs = keyValue.Split(':');
-        if(strs != null && strs.Length >= 2)
+        if (UpdateConnectStateEvent != null)
         {
-            if (strs[0].Equals("attention"))
+            UpdateConnectStateEvent(value);
+        }
+    }
+    #elif UNITY_IOS
+    void receiveDeviceInfo(string value) 
+    {
+        if (UpdateDeviceInfoEvent != null) 
+        {
+            UpdateDeviceInfoEvent(value);
+        }
+    }
+    #endif
+
+    void receivePoorSignal(string value)
+    {
+        if (UpdatePoorSignalEvent != null)
+        {
+            UpdatePoorSignalEvent(int.Parse(value));
+        }
+    }
+
+    void receiveAttention(string value)
+    {
+        if (UpdateAttentionEvent != null)
+        {
+            UpdateAttentionEvent(int.Parse(value));
+        }
+    }
+
+    void receiveMeditation(string value)
+    {
+        if (UpdateMeditationEvent != null)
+        {
+            UpdateMeditationEvent(int.Parse(value));
+        }
+    }
+
+    void receiveRawdata(string value)
+    {
+        if (UpdateRawdataEvent != null)
+        {
+            UpdateRawdataEvent(int.Parse(value));
+        }
+    }
+
+    void receiveBlink(string value)
+    {
+        if (UpdateBlinkEvent != null)
+        {
+            UpdateBlinkEvent(int.Parse(value));
+        }
+    }
+
+    void receiveDelta(string value)
+    {
+        if (UpdateDeltaEvent != null)
+        {
+            UpdateDeltaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveTheta(string value)
+    {
+        if (UpdateThetaEvent != null)
+        {
+            UpdateThetaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveLowAlpha(string value)
+    {
+        if (UpdateLowAlphaEvent != null)
+        {
+            UpdateLowAlphaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveHighAlpha(string value)
+    {
+        if (UpdateHighAlphaEvent != null)
+        {
+            UpdateHighAlphaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveLowBeta(string value)
+    {
+        if (UpdateLowBetaEvent != null)
+        {
+            UpdateLowBetaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveHighBeta(string value)
+    {
+        if (UpdateHighBetaEvent != null)
+        {
+            UpdateHighBetaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveLowGamma(string value)
+    {
+        if (UpdateLowGammaEvent != null)
+        {
+            UpdateLowGammaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveHighGamma(string value)
+    {
+        if (UpdateHighGammaEvent != null)
+        {
+            UpdateHighGammaEvent(float.Parse(value));
+        }
+    }
+
+    void receiveEEGAlgorithmValue(string valueKey)
+    {
+        string[] value = valueKey.Split(':');
+
+        if (value != null && value.Length >= 2)
+        {
+            if (value[0].Equals("attention"))
             {
-                if(Algo_UpdateAttentionEvent != null)
+                if (UpdateAlgoAttentionEvent != null)
                 {
-                    Algo_UpdateAttentionEvent(int.Parse(strs[1]));
-                }
-            }else if (strs[0].Equals("meditation"))
-            {
-                if (Algo_UpdateMeditationEvent != null)
-                {
-                    Algo_UpdateMeditationEvent(int.Parse(strs[1]));
+                    UpdateAlgoAttentionEvent(int.Parse(value[1]));
                 }
             }
-            else if (strs[0].Equals("delta"))
+            else if (value[0].Equals("meditation"))
             {
-                if (Algo_UpdateDeltaEvent != null)
+                if (UpdateAlgoMeditationEvent != null)
                 {
-                    Algo_UpdateDeltaEvent(float.Parse(strs[1]));
+                    UpdateAlgoMeditationEvent(int.Parse(value[1]));
                 }
             }
-            else if (strs[0].Equals("theta"))
+            else if (value[0].Equals("delta"))
             {
-                if (Algo_UpdateThetaEvent != null)
+                if (UpdateAlgoDeltaEvent != null)
                 {
-                    Algo_UpdateThetaEvent(float.Parse(strs[1]));
+                    UpdateAlgoDeltaEvent(float.Parse(value[1]));
                 }
             }
-            else if (strs[0].Equals("alpha"))
+            else if (value[0].Equals("theta"))
             {
-                if (Algo_UpdateAlphaEvent != null)
+                if (UpdateAlgoThetaEvent != null)
                 {
-                    Algo_UpdateAlphaEvent(float.Parse(strs[1]));
+                    UpdateAlgoThetaEvent(float.Parse(value[1]));
                 }
             }
-            else if (strs[0].Equals("beta"))
+            else if (value[0].Equals("alpha"))
             {
-                if (Algo_UpdateBetaEvent != null)
+                if (UpdateAlgoAlphaEvent != null)
                 {
-                    Algo_UpdateBetaEvent(float.Parse(strs[1]));
+                    UpdateAlgoAlphaEvent(float.Parse(value[1]));
                 }
             }
-            else if (strs[0].Equals("gamma"))
+            else if (value[0].Equals("beta"))
             {
-                if (Algo_UpdateGammaEvent != null)
+                if (UpdateAlgoBetaEvent != null)
                 {
-                    Algo_UpdateGammaEvent(float.Parse(strs[1]));
+                    UpdateAlgoBetaEvent(float.Parse(value[1]));
+                }
+            }
+            else if (value[0].Equals("gamma"))
+            {
+                if (UpdateAlgoGammaEvent != null)
+                {
+                    UpdateAlgoGammaEvent(float.Parse(value[1]));
                 }
             }
         }
     }
 
-
-    //====================
-
-#if UNITY_ANDROID
-    /*
-	   receive "idle" : BT is null or connect status has not been updated
-	   receive "connecting": Android device is connecting mindwave headset.
-	   receive "connected" : Android device can read data from mindwave headset.
-	   receive "not found" : paired mindwave headset is off or not in searchable area.
-	   receive "not paired": there are not mindwave headset paired with Android device.
-	   receive "disconnected":mindwave headset is off or out of searchable area of Android device.
-	   receive "low battery" :mindwave headset's battery dose not have power.
-	   receive "bluetooth error" : Android device is not support BT.
-    */
-    void receiveConnectState1(string value){
-		if(UpdateConnectStateEvent != null){
-			UpdateConnectStateEvent(value);
-		}
-	}
-#endif	
-	//====================
-
-
-	void OnApplicationQuit(){
+    void OnApplicationQuit()
+    {
         checkUpdate = false;
         UnityThinkGear.StopStream();
-		UnityThinkGear.Close();
-		
-	}
-
-
-
+        UnityThinkGear.Close();	
+    }
 }
