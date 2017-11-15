@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DisplayData : MonoBehaviour
 {
@@ -30,10 +31,26 @@ public class DisplayData : MonoBehaviour
     private float algoBeta = 0.0f;
     private float algoGamma = 0.0f;
 
-    public Texture2D[] SignalIcons;
+    [SerializeField] private Sprite[] signalIcons;
     private float indexSignalIcons = 1;
     private bool enableAnimation = false;
     private float animationInterval = 0.06f;
+
+    [SerializeField] private Image canvasSignalIcon;
+    [SerializeField] private Text[] canvasText;
+
+    void Awake()
+    {
+        if (signalIcons == null)
+        {
+            Debug.LogError("No signal icons found, please attach them");
+        }
+
+        if (canvasText == null)
+        {
+            Debug.LogError("No textboxes set, please attach them");
+        }
+    }
 
     void Start()
     {
@@ -194,7 +211,8 @@ public class DisplayData : MonoBehaviour
         algoGamma = value;
     }
 
-    void FixedUpdate()
+
+    void Update()
     {
         if (enableAnimation)
         {
@@ -205,66 +223,60 @@ public class DisplayData : MonoBehaviour
 
             indexSignalIcons += animationInterval;
         }
+
+        canvasSignalIcon.sprite = signalIcons[(int)indexSignalIcons];
+
+        canvasText[0].text = "PoorSignal: " + poorSignal;
+        canvasText[1].text = "Attention: " + attention;
+        canvasText[2].text = "Meditation: " + meditation;
+        canvasText[3].text = "Raw: " + raw;
+        canvasText[4].text = "Blink: " + blink;
+        canvasText[5].text = "Delta: " + delta;
+        canvasText[6].text = "Theta: " + theta;
+        canvasText[7].text = "LowAlpha: " + lowAlpha;
+        canvasText[8].text = "HighAlpha: " + highAlpha;
+        canvasText[9].text = "LowBeta: " + lowBeta;
+        canvasText[10].text = "HighBeta: " + highBeta;
+        canvasText[11].text = "LowGamma: " + lowGamma;
+        canvasText[12].text = "HighGamma: " + highGamma;
+        canvasText[13].text = "AlgoAttention: " + algoAttention;
+        canvasText[14].text = "AlgoMeditation: " + algoMeditation;
+        canvasText[15].text = "AlgoDelta: " + algoDelta;
+        canvasText[16].text = "AlgoTheta: " + algoTheta;
+        canvasText[17].text = "AlgoAlpha: " + algoAlpha;
+        canvasText[18].text = "AlgoBeta: " + algoBeta;
+        canvasText[19].text = "AlgoGamma: " + algoGamma;
+        #if UNITY_ANDROID
+        canvasText[20].text = "ConnectionState: " + connectionState;
+        #elif UNITY_IOS
+        textBoxes[20].text = "DeviceInfo: " + deviceInfo;
+        #endif
     }
 
-    void OnGUI()
+    public void Init()
     {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Demo App");
-        GUILayout.Space(Screen.width - 250);
-        GUILayout.Label(SignalIcons[(int)indexSignalIcons]);
-        GUILayout.EndHorizontal();
+        Debug.Log("Init Button Click");
 
-        if (GUI.Button(new Rect(190, 20, 100, 80), "Init"))
-        {
-            Debug.Log("Init Button Click");
-            UnityThinkGear.Init(true);
-        }
-
-        if (GUI.Button(new Rect(190, 140, 100, 80), "Connect"))
-        {
-            Debug.Log("Connect Button Click");
-            #if UNITY_ANDROID || UNITY_IOS
-            UnityThinkGear.StartStream();
-            #endif
-        }
-
-        if (GUI.Button(new Rect(190, 250, 100, 80), "Quit"))
-        {
-            Application.Quit();
-        }
-
-        GUILayout.BeginVertical();
-        GUILayout.Label("Raw:" + raw);
-        GUILayout.Label("PoorSignal:" + poorSignal);
-        GUILayout.Label("Attention:" + attention);
-        GUILayout.Label("Meditation:" + meditation);
-        GUILayout.Label("Blink:" + blink);
-        GUILayout.Label("Delta:" + delta);
-        GUILayout.Label("Theta:" + theta);
-        GUILayout.Label("LowAlpha:" + lowAlpha);
-        GUILayout.Label("HighAlpha:" + highAlpha);
-        GUILayout.Label("LowBeta:" + lowBeta);
-        GUILayout.Label("HighBeta:" + highBeta);
-        GUILayout.Label("LowGamma:" + lowGamma);
-        GUILayout.Label("HighGamma:" + highGamma);
-        GUILayout.Label("");
-        GUILayout.Label("");
-        GUILayout.Label("EEG Algorithm output values");
-        GUILayout.Label("Attention:" + algoAttention);
-        GUILayout.Label("Meditation:" + algoMeditation);
-        GUILayout.Label("Delta:" + algoDelta);
-        GUILayout.Label("Theta:" + algoTheta);
-        GUILayout.Label("Alpha:" + algoAlpha);
-        GUILayout.Label("Beta:" + algoBeta);
-        GUILayout.Label("Gamma:" + algoGamma);
-        GUILayout.Label("");
-        GUILayout.Label("");
-        #if UNITY_ANDROID
-        GUILayout.Label("ConnectionState:" + connectionState);
-        #elif UNITY_IOS
-        GUILayout.Label("DeviceInfo" + deviceInfo);
+        #if UNITY_ANDROID || UNITY_IOS
+        UnityThinkGear.Init(true);
         #endif
-        GUILayout.EndVertical();
-    }	
+    }
+
+    public void Connect()
+    {
+        Debug.Log("Connect Button Click");
+
+        #if UNITY_ANDROID || UNITY_IOS
+        UnityThinkGear.StartStream();
+        #endif
+    }
+
+    public void Quit()
+    {
+        Debug.Log("Quit Button Click");
+
+        #if UNITY_ANDROID || UNITY_IOS
+        Application.Quit();
+        #endif
+    }
 }
