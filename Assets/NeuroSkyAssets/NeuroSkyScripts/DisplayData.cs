@@ -155,11 +155,11 @@ public class DisplayData : MonoBehaviour {
 		// FMGID ; name ; ConnectId
 		print ("Unity  Test DeviceInfo = "+deviceInfo);
 	}
-	
-	/**
+
+    /**
 	 *when Fixed Timestep == 0.02 
 	 **/
-	void FixedUpdate(){
+    void FixedUpdate(){
 		if(enableAnimation){
 			if(indexSignalIcons >= 4.8){
 				indexSignalIcons = 2;
@@ -182,7 +182,7 @@ public class DisplayData : MonoBehaviour {
 		
 		if(GUI.Button(new Rect(190,140,100,80),"Connect")){
 			print("Connect Button CLick");
-#if UNITY_ANDROID || UNITY_IPHONE
+#if UNITY_ANDROID || UNITY_IOS
 			UnityThinkGear.StartStream();
 #endif
 
