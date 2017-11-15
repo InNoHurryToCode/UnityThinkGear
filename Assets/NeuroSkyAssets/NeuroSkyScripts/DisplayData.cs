@@ -22,7 +22,7 @@ public class DisplayData : MonoBehaviour
     private float lowBeta = 0.0f;
     private float highBeta = 0.0f;
     private float lowGamma = 0.0f;
-	private float highGamma = 0.0f;
+    private float highGamma = 0.0f;
     private int algoAttention = 0;
     private int algoMeditation = 0;
     private float algoDelta = 0.0f;
