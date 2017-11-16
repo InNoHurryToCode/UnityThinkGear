@@ -10,26 +10,26 @@ public class DisplayData : MonoBehaviour
     #elif UNITY_IOS
     private string deviceInfo = "";
     #endif
-    private int poorSignal = 200;
-    private int attention = 0;
-    private int meditation = 0;
-    private int raw = 0;
-    private int blink = 0;
-    private float delta = 0.0f;
-    private float theta = 0.0f;
-    private float lowAlpha = 0.0f;
-    private float highAlpha = 0.0f;
-    private float lowBeta = 0.0f;
-    private float highBeta = 0.0f;
-    private float lowGamma = 0.0f;
-    private float highGamma = 0.0f;
-    private int algoAttention = 0;
-    private int algoMeditation = 0;
-    private float algoDelta = 0.0f;
-    private float algoTheta = 0.0f;
-    private float algoAlpha = 0.0f;
-    private float algoBeta = 0.0f;
-    private float algoGamma = 0.0f;
+    private int poorSignal;
+    private int attention;
+    private int meditation;
+    private int raw;
+    private int blink;
+    private float delta;
+    private float theta;
+    private float lowAlpha;
+    private float highAlpha;
+    private float lowBeta;
+    private float highBeta;
+    private float lowGamma;
+    private float highGamma;
+    private int algoAttention;
+    private int algoMeditation;
+    private float algoDelta;
+    private float algoTheta;
+    private float algoAlpha;
+    private float algoBeta;
+    private float algoGamma;
 
     [SerializeField] private Sprite[] signalIcons;
     private float indexSignalIcons = 1;
@@ -48,7 +48,7 @@ public class DisplayData : MonoBehaviour
 
         if (canvasText == null)
         {
-            Debug.LogError("No textboxes set, please attach them");
+            Debug.LogError("No canvas text boxes set, please attach them");
         }
     }
 
@@ -256,27 +256,18 @@ public class DisplayData : MonoBehaviour
     public void Init()
     {
         Debug.Log("Init Button Click");
-
-        #if UNITY_ANDROID || UNITY_IOS
         UnityThinkGear.Init(true);
-        #endif
     }
 
     public void Connect()
     {
         Debug.Log("Connect Button Click");
-
-        #if UNITY_ANDROID || UNITY_IOS
         UnityThinkGear.StartStream();
-        #endif
     }
 
     public void Quit()
     {
         Debug.Log("Quit Button Click");
-
-        #if UNITY_ANDROID || UNITY_IOS
         Application.Quit();
-        #endif
     }
 }

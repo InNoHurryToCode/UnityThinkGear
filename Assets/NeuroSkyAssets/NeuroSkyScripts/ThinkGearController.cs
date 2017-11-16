@@ -33,11 +33,11 @@ public class ThinkGearController : MonoBehaviour
     public event UpdateFloatDelegate UpdateAlgoBetaEvent;
     public event UpdateFloatDelegate UpdateAlgoGammaEvent;
 
-    private bool sendRawEnable = false;
-    private bool sendEEGEnable = false;
-    private bool sendESenseEnable = true;
-    private bool sendBlinkEnable = true;
-    private bool checkUpdate = true;
+    private bool sendRawEnable;
+    private bool sendEEGEnable;
+    private bool sendESenseEnable;
+    private bool sendBlinkEnable;
+    private bool checkUpdate;
 
     void Awake()
     {
@@ -51,6 +51,7 @@ public class ThinkGearController : MonoBehaviour
         sendEEGEnable = UnityThinkGear.GetSendEEGEnable();
         sendESenseEnable = UnityThinkGear.GetSendESenseEnable();
         sendBlinkEnable = UnityThinkGear.GetSendBlinkEnable();
+        checkUpdate = true;
     }
 
     IEnumerator CheckUpdateCoroutine()
