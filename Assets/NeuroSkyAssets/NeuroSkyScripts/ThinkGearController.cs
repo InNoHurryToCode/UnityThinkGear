@@ -61,13 +61,11 @@ public class ThinkGearController : MonoBehaviour
             if (!sendRawEnable && (UpdateRawdataEvent != null))
             {
                 sendRawEnable = true;
-                UnityThinkGear.SetSendRawEnable(sendRawEnable);
             }
-
+            
             if (sendRawEnable && UpdateRawdataEvent == null)
             {
                 sendRawEnable = false;
-                UnityThinkGear.SetSendRawEnable(sendRawEnable);
             }
 
             if (!sendEEGEnable &&
@@ -77,9 +75,8 @@ public class ThinkGearController : MonoBehaviour
             UpdateHighBetaEvent != null || UpdateHighGammaEvent != null))
             {
                 sendEEGEnable = true;
-                UnityThinkGear.SetSendEEGEnable(sendEEGEnable);
             }
-
+            
             if (sendEEGEnable &&
             UpdateDeltaEvent == null && UpdateThetaEvent == null &&
             UpdateLowAlphaEvent == null && UpdateLowBetaEvent == null &&
@@ -87,32 +84,32 @@ public class ThinkGearController : MonoBehaviour
             UpdateHighBetaEvent == null && UpdateHighGammaEvent == null)
             {
                 sendEEGEnable = false;
-                UnityThinkGear.SetSendEEGEnable(sendEEGEnable);
             }
 
             if (!sendESenseEnable && (UpdateAttentionEvent != null || UpdateMeditationEvent != null))
             {
                 sendESenseEnable = true;
-                UnityThinkGear.SetSendESenseEnable(sendESenseEnable);
             }
-
+            
             if (sendESenseEnable && UpdateAttentionEvent == null && UpdateMeditationEvent == null)
             {
                 sendESenseEnable = false;
-                UnityThinkGear.SetSendESenseEnable(sendESenseEnable);
             }
 
             if (!sendBlinkEnable && (UpdateBlinkEvent != null))
             {
                 sendBlinkEnable = true;
-                UnityThinkGear.SetSendBlinkEnable(sendBlinkEnable);
             }
-
+            
             if (sendBlinkEnable && UpdateBlinkEvent == null)
             {
                 sendBlinkEnable = false;
-                UnityThinkGear.SetSendBlinkEnable(sendBlinkEnable);
             }
+
+            UnityThinkGear.SetSendRawEnable(sendRawEnable);
+            UnityThinkGear.SetSendEEGEnable(sendEEGEnable);
+            UnityThinkGear.SetSendESenseEnable(sendESenseEnable);
+            UnityThinkGear.SetSendBlinkEnable(sendBlinkEnable);
 
             yield return new WaitForSeconds(1f);
         }
