@@ -45,7 +45,7 @@ public class ThinkGearController : MonoBehaviour
         StartCoroutine(CheckUpdateCoroutine());
     }
 
-    void Start ()
+    void Start()
     {
         sendRawEnable = UnityThinkGear.GetSendRawEnable();
         sendEEGEnable = UnityThinkGear.GetSendEEGEnable();
@@ -246,54 +246,56 @@ public class ThinkGearController : MonoBehaviour
 
         if (value != null && value.Length >= 2)
         {
-            if (value[0].Equals("attention"))
+            switch (value[0])
             {
-                if (UpdateAlgoAttentionEvent != null)
-                {
-                    UpdateAlgoAttentionEvent(int.Parse(value[1]));
-                }
-            }
-            else if (value[0].Equals("meditation"))
-            {
-                if (UpdateAlgoMeditationEvent != null)
-                {
-                    UpdateAlgoMeditationEvent(int.Parse(value[1]));
-                }
-            }
-            else if (value[0].Equals("delta"))
-            {
-                if (UpdateAlgoDeltaEvent != null)
-                {
-                    UpdateAlgoDeltaEvent(float.Parse(value[1]));
-                }
-            }
-            else if (value[0].Equals("theta"))
-            {
-                if (UpdateAlgoThetaEvent != null)
-                {
-                    UpdateAlgoThetaEvent(float.Parse(value[1]));
-                }
-            }
-            else if (value[0].Equals("alpha"))
-            {
-                if (UpdateAlgoAlphaEvent != null)
-                {
-                    UpdateAlgoAlphaEvent(float.Parse(value[1]));
-                }
-            }
-            else if (value[0].Equals("beta"))
-            {
-                if (UpdateAlgoBetaEvent != null)
-                {
-                    UpdateAlgoBetaEvent(float.Parse(value[1]));
-                }
-            }
-            else if (value[0].Equals("gamma"))
-            {
-                if (UpdateAlgoGammaEvent != null)
-                {
-                    UpdateAlgoGammaEvent(float.Parse(value[1]));
-                }
+                case "attention":
+                    if (UpdateAlgoAttentionEvent != null)
+                    {
+                        UpdateAlgoAttentionEvent(int.Parse(value[1]));
+                    }
+                    break;
+                    
+                case "meditation":
+                    if (UpdateAlgoMeditationEvent != null)
+                    {
+                        UpdateAlgoMeditationEvent(int.Parse(value[1]));
+                    }
+                    break;
+                    
+                case "delta":
+                    if (UpdateAlgoDeltaEvent != null)
+                    {
+                        UpdateAlgoDeltaEvent(float.Parse(value[1]));
+                    }
+                    break;
+            
+                case "theta":
+                    if (UpdateAlgoThetaEvent != null)
+                    {
+                        UpdateAlgoThetaEvent(float.Parse(value[1]));
+                    }
+                    break;
+                    
+                case "alpha":
+                    if (UpdateAlgoAlphaEvent != null)
+                    {
+                        UpdateAlgoAlphaEvent(float.Parse(value[1]));
+                    }
+                    break;
+                    
+                case "beta":
+                    if (UpdateAlgoBetaEvent != null)
+                    {
+                        UpdateAlgoBetaEvent(float.Parse(value[1]));
+                    }
+                    break
+                    
+                case "gamma":
+                    if (UpdateAlgoGammaEvent != null)
+                    {
+                        UpdateAlgoGammaEvent(float.Parse(value[1]));
+                    }
+                    break;
             }
         }
     }
