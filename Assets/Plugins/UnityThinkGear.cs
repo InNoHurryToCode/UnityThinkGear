@@ -83,7 +83,7 @@ public class UnityThinkGear
         #else
         return false;
         #endif
-	}
+    }
 
     public static bool GetSendEEGEnable()
     {
@@ -94,7 +94,7 @@ public class UnityThinkGear
         #else
         return false;
         #endif
-	}
+    }
 
     public static bool GetSendESenseEnable()
     {
@@ -105,7 +105,7 @@ public class UnityThinkGear
         #else
         return false;
         #endif
-	}
+    }
 
     public static bool GetSendBlinkEnable()
     {
@@ -116,7 +116,7 @@ public class UnityThinkGear
         #else
         return false;
         #endif
-	}
+    }
 	
     public static void SetSendRawEnable(bool enabled)
     {
