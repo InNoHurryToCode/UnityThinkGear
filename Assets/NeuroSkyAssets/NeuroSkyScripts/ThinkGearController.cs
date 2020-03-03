@@ -68,20 +68,28 @@ public class ThinkGearController : MonoBehaviour
                 sendRawEnable = false;
             }
 
-            if (!sendEEGEnable &&
-            (UpdateDeltaEvent != null || UpdateThetaEvent != null ||
-            UpdateLowAlphaEvent != null || UpdateLowBetaEvent != null ||
-            UpdateLowGammaEvent != null || UpdateHighAlphaEvent != null ||
-            UpdateHighBetaEvent != null || UpdateHighGammaEvent != null))
+            if (!sendEEGEnable
+            && (UpdateDeltaEvent != null
+            || UpdateThetaEvent != null
+            || UpdateLowAlphaEvent != null
+            || UpdateLowBetaEvent != null
+            || UpdateLowGammaEvent != null
+            || UpdateHighAlphaEvent != null
+            || UpdateHighBetaEvent != null
+            || UpdateHighGammaEvent != null))
             {
                 sendEEGEnable = true;
             }
             
-            if (sendEEGEnable &&
-            UpdateDeltaEvent == null && UpdateThetaEvent == null &&
-            UpdateLowAlphaEvent == null && UpdateLowBetaEvent == null &&
-            UpdateLowGammaEvent == null && UpdateHighAlphaEvent == null &&
-            UpdateHighBetaEvent == null && UpdateHighGammaEvent == null)
+            if (sendEEGEnable
+            && UpdateDeltaEvent == null
+            && UpdateThetaEvent == null
+            && UpdateLowAlphaEvent == null
+            && UpdateLowBetaEvent == null
+            && UpdateLowGammaEvent == null
+            && UpdateHighAlphaEvent == null
+            && UpdateHighBetaEvent == null
+            && UpdateHighGammaEvent == null)
             {
                 sendEEGEnable = false;
             }
